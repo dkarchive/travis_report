@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 2.2
+before_script:
+  - rake install
+script:
+  - travis_report
+  - travis_report bin/assets/no-projects
+  - travis_report bin/assets/travis
+  - travis_report bin/assets/travis --fail-only
