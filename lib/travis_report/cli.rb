@@ -8,7 +8,8 @@ module TravisReport
   class << self
     NUMBER_OF_THREADS = 10
 
-    OPT_FAIL = 'fail-only'
+    OPT_FAIL = 'fail'
+    OPT_NEW = 'new'
     OUT_FAIL = '🔴'
     OUT_PASS = '✅'
 
@@ -68,12 +69,14 @@ module TravisReport
 
     def cli
       o_fail = make_option OPT_FAIL
+      o_new = make_option OPT_NEW
       if ARGV.count == 0
-        puts "Usage: #{PROJECT} <file> [#{o_fail}]"
+        puts "Usage: #{PROJECT} <file> [#{o_fail}] [#{o_new}]"
         exit
       end
 
       cli_fail = ARGV.include? o_fail
+      cli_new = ARGV.include? o_new
 
       filename = ARGV[0]
 
@@ -95,11 +98,18 @@ module TravisReport
 
       puts "Collecting reports for #{p.count} projects"
       puts 'Only reporting failing' if cli_fail
+      puts 'Only reporting new builds' if cli_new
       error = nil
       Parallel.each(p, in_threads: NUMBER_OF_THREADS) do |r|
         begin
           t = Travis::Repository.find r
-          puts output_info(r, t) unless (cli_fail && t.passed?)
+          b = t.last_build
+          diff = date_difference b.finished_at
+
+          next if cli_fail && t.passed?
+          next if cli_new && diff != 0
+
+          puts output_info(r, t)
         rescue => e
           puts "Error getting #{r}: #{e}"
           error = 'Sadness'
