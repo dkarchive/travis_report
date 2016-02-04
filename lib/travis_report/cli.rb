@@ -98,7 +98,7 @@ module TravisReport
 
       puts "Collecting reports for #{p.count} projects"
       puts 'Only reporting failing' if cli_fail
-      puts 'Only reporting new builds' if cli_new
+      puts 'Only reporting builds from today' if cli_new
       error = nil
       Parallel.each(p, in_threads: NUMBER_OF_THREADS) do |r|
         begin
