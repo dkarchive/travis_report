@@ -17,7 +17,7 @@ $ rake install # 🎉
 ## Usage
 
 ```
-travis_report <file> [--fail] [--new]
+travis_report <file> [--fail] [--today]
 ```
 
 ```

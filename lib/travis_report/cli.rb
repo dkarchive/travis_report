@@ -9,7 +9,7 @@ module TravisReport
     NUMBER_OF_THREADS = 10
 
     OPT_FAIL = 'fail'
-    OPT_NEW = 'new'
+    OPT_NEW = 'today'
     OUT_FAIL = '🔴'
     OUT_PASS = '✅'
 
