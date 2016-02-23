@@ -7,4 +7,4 @@ script:
   - travis_report
   - travis_report bin/assets/no-projects
   - travis_report bin/assets/travis
-  - travis_report bin/assets/travis --fail-only
+  - travis_report bin/assets/travis --fail
