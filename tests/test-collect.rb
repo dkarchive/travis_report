@@ -1,11 +1,11 @@
 require 'travis_report'
 
-puts 'Testing TravisReport::collect'
-
 list = [
   'dkhamsing/awesome_bot',
   'dkhamsing/travis_report'
 ]
+
+puts "Testing TravisReport::collect with #{list.count} repos"
 
 c = []
 TravisReport::collect list, 2, false, false do |r, t|
