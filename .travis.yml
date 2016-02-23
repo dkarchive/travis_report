@@ -8,3 +8,4 @@ script:
   - travis_report bin/assets/no-projects
   - travis_report bin/assets/travis
   - travis_report bin/assets/travis --fail
+  - ruby tests/test-collect.rb
