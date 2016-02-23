@@ -1,8 +1,8 @@
 # Command line interface
 module TravisReport
   require 'travis_report/version'
+  require 'travis_report/collect'
 
-  require 'parallel'
   require 'travis'
 
   class << self
@@ -99,22 +99,10 @@ module TravisReport
       puts "Collecting reports for #{p.count} projects"
       puts 'Only reporting failing' if cli_fail
       puts 'Only reporting builds from today' if cli_new
-      error = nil
-      Parallel.each(p, in_threads: NUMBER_OF_THREADS) do |r|
-        begin
-          t = Travis::Repository.find r
-          b = t.last_build
-          diff = date_difference b.finished_at
 
-          next if cli_fail && t.passed?
-          next if cli_new && diff != 0
-
-          puts output_info(r, t)
-        rescue => e
-          puts "Error getting #{r}: #{e}"
-          error = 'Sadness'
-        end
-      end # Parallel.each
+      error = collect(p, NUMBER_OF_THREADS, cli_fail, cli_new) do |r, t|
+        puts output_info r, t
+      end
 
       exit 1 unless error.nil?
     end # cli
